@@ -1,0 +1,12 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>All Posts - Teahouse Smyrna</title><link>https://stephanoskomnenos.github.io/posts/</link><description>All Posts | Teahouse Smyrna</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 20 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://stephanoskomnenos.github.io/posts/" rel="self" type="application/rss+xml"/><item><title>Git Workflow</title><link>https://stephanoskomnenos.github.io/posts/git-workflow/</link><pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate><author>Stephanos Komnenos</author><guid>https://stephanoskomnenos.github.io/posts/git-workflow/</guid><description><![CDATA[JetBrains 家的 IDE 真是太好用了（还有谁在用命令行？
+Undoing Commits &amp; Changes git revert git revert &lt;commit&gt;
+通过在新的 commit 中回退旧 commit 的修改来撤销旧 commit，不改动原有的 commit 树。
+git reset git reset [--soft | --mixed | --hard] &lt;commit&gt;
+回退到指定的 commit。
+--hard ：（危险操作）回退 HEAD，working directory 以及 staging index。
+--soft ：仅回退 HEAD。 (IDEA 里的 Undo Commit 就是 git reset --soft HEAD^)
+--mixed ：（默认）回退 HEAD 和 staging index。
+git rm git rm [--cached] [-f] [-r] &lt;file&gt;
+在工作区或暂存区移除文件。
+-f ：force，当文件在工作区已有修改时使用。
+--cached ：仅移除 staged index 中的文件，不改动工作区。]]></description></item></channel></rss>
