@@ -211,7 +211,7 @@ theme = 'LoveIt'
     Twitter = ""
     Instagram = ""
     Facebook = ""
-    Telegram = ""
+    Telegram = "stephanos_komnenos"
     Medium = ""
     Gitlab = ""
     Youtubelegacy = ""
@@ -268,8 +268,8 @@ theme = 'LoveIt'
     XMPP = ""
     Matrix = ""
     Bilibili = ""
-    Email = ""
-    RSS = ""
+    Email = "linjt267@outlook.com"
+    RSS = "https://stephanoskomnenos.github.io/index.xml"
 
   # Page global config
   # 文章页面全局配置
