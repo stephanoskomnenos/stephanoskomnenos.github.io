@@ -2,6 +2,7 @@ baseURL = 'https://stephanoskomnenos.github.io/'
 languageCode = 'zh-cn'
 title = 'Teahouse Smyrna'
 theme = 'LoveIt'
+buildFuture = true
 
 [module]
   [module.hugoVersion]
