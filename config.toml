@@ -138,7 +138,7 @@ theme = 'LoveIt'
   # Search config
   # 搜索配置
   [params.search]
-    enable = false
+    enable = true
     # type of search engine ["lunr", "algolia"]
     # 搜索引擎的类型 ["lunr", "algolia"]
     type = "lunr"
@@ -375,11 +375,11 @@ theme = 'LoveIt'
       Pinterest = false
       Tumblr = false
       HackerNews = true
-      Reddit = false
-      VK = false
+      Reddit = true
+      VK = true
       Buffer = false
       Xing = false
-      Line = true
+      Line = false
       Instapaper = false
       Pocket = false
       Flipboard = false
@@ -585,3 +585,6 @@ theme = 'LoveIt'
     # whether to use object-fit-images to be compatible with older browsers
     # 是否使用 object-fit-images 来兼容旧式浏览器
     objectFit = false
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
