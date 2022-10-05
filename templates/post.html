@@ -1,0 +1,30 @@
+$if(title)$
+<p class="text-3xl font-bold pb-4 text-start font-serif sm:text-4xl">
+    $title$
+</p>
+$endif$
+
+<p class="text-lg text-start pl-2 font-thin sm:font-normal font-mono italic">
+    $date$
+    $if(author)$
+    by $author$
+    $endif$
+</p>
+<div class="row flex-auto pl-2 mb-16">
+
+    $if(tags)$
+    <span class="text-sm font-thin sm:font-normal sm:font-serif">
+        Tags:
+    </span>
+    $endif$
+
+    $for(tags)$
+    <a href="/tags/$tag$.html" class="text-sm font-thin sm:font-normal sm:font-serif">
+        $tag$
+    </a>
+    $endfor$
+
+</div>
+<section class="prose lg:prose-xl font-sans">
+    $body$
+</section>

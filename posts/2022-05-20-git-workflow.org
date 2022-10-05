@@ -1,0 +1,85 @@
+---
+title: Git Workflow
+tags: git
+---
+
+JetBrains 家的 IDE 真是太好用了（还有谁在用命令行？
+
+* Undoing Commits & Changes
+
+** git revert
+
+=git revert <commit>=
+
+通过在新的 commit 中回退旧 commit 的修改来撤销旧 commit，不改动原有的 commit 树。
+
+** git reset
+
+=git reset [--soft | --mixed | --hard] <commit>=
+
+回退到指定的 commit。
+
+=--hard= ：（危险操作）回退 HEAD，working directory 以及 staging index。
+
+=--soft= ：仅回退 HEAD。 (IDEA 里的 Undo Commit 就是 =git reset --soft HEAD^=)
+
+=--mixed= ：（默认）回退 HEAD 和 staging index。
+
+** git rm
+
+=git rm [--cached] [-f] [-r] <file>=
+
+在工作区或暂存区移除文件。
+
+=-f= ：force，当文件在工作区已有修改时使用。
+
+=--cached= ：仅移除 staged index 中的文件，不改动工作区。
+
+* Rewriting history
+
+** git commit --amend
+
+=git commit --amend [-m <msg>]=
+
+修改上一次的 commit。（commit id 也会改变）
+
+** git rebase
+
+=git rebase [<upstream> [<branch>]]=
+
+从当前分支与 upstream 的共祖开始，将 upstream 上的修改合并到当前分支。
+
+*** 如果冲突
+
+=--abort= : 放弃 rebase，回到操作前的状态。
+
+=--continue= : 在修复冲突之后，使用 =git add <file>= 更新 index，再执行此命令继续 rebase。
+
+=--skip= : 跳过冲突的 commit。
+
+* Merge vs. Rebase
+
+Rebase 不会产生新的 "Merge commit" ，最后得到的 commit history 是线性的。
+
+** The Golden Rule of Rebasing
+
+不要在公共分支上 rebase，否则需要 force push，这样会改动 commit history。
+
+* GPG Sign
+
+参见以下链接（笑：
+
+[[https://github.com/torvalds/linux/tree/8bcab0346d4fcf21b97046eb44db8cf37ddd6da0]]
+
+github 仅通过 commit 所用的邮箱判断提交者，在有操作权限的仓库中可以伪造出任何人的提交记录。
+
+如果要防止别人伪装成自己提交 commit，可以用 GPG 签名自己的 commit。
+
+#+DOWNLOADED: screenshot @ 2022-05-20 22:51:28
+[[file:../images/2022-05-20_22-51-28_screenshot.png]]
+
+经过签名的 commit 在 github 上会显示 "Verified" 标签。
+
+详见 Github 文档：
+
+[[https://docs.github.com/en/enterprise-server@3.5/authentication/managing-commit-signature-verification][Managing commit signature verification - GitHub Docs]]

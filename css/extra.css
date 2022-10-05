@@ -1,0 +1,120 @@
+/* :root {
+    --color-primary: #EDF2F7;
+    --color-secondary: #CBD5E0;
+    --color-heading: #2D3748;
+    --color-body: #1A202C;
+} */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-semibold font-serif my-4;
+    }
+
+    h1 {
+        @apply text-4xl;
+    }
+
+    h2 {
+        @apply text-3xl;
+    }
+
+    h3 {
+        @apply text-2xl;
+    }
+
+    h4 {
+        @apply text-xl;
+    }
+
+    pre {
+        @apply my-6;
+    }
+
+    p {
+        @apply my-6;
+    }
+
+    a {
+        @apply text-blue-600;
+    }
+
+    blockquote {
+        @apply font-serif text-lg text-gray-700 bg-gray-100 italic border-l-4 border-gray-600 p-1 mx-6 my-2;
+    }
+
+    figure {
+        @apply flex flex-col items-center my-4;
+    }
+
+    figcaption {
+        @apply italic my-2 text-sm;
+    }
+
+    ul,
+    ol {
+        @apply ml-10 my-6;
+    }
+
+    ul {
+        @apply list-disc;
+    }
+
+    ol {
+        @apply list-decimal;
+    }
+
+    table {
+        @apply table-auto;
+    }
+
+    td {
+        @apply border px-4 py-2;
+    }
+
+    tr.even {
+        @apply bg-gray-100;
+    }
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+        /* use !important to prevent issues with browser extensions that change fonts */
+        font-family: 'icomoon' !important;
+        speak: never;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .menu-link {
+        @apply font-semibold text-xl m-2 p-2 no-underline;
+    }
+
+    .menu-link:hover {
+        @apply text-blue-400;
+    }
+
+    .home-logo {
+        font-family: 'Dancing Script';
+        @apply text-6xl;
+    }
+
+    .title-logo {
+        font-family: 'Dancing Script';
+    }
+}
