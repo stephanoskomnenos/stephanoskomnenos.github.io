@@ -1,10 +1,3 @@
-/* :root {
-    --color-primary: #EDF2F7;
-    --color-secondary: #CBD5E0;
-    --color-heading: #2D3748;
-    --color-body: #1A202C;
-} */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,6 +11,7 @@
     h5,
     h6 {
         @apply font-semibold font-serif my-4;
+        @apply text-black dark:text-zinc-400;
     }
 
     h1 {
@@ -45,11 +39,16 @@
     }
 
     a {
-        @apply text-blue-600;
+        @apply text-blue-600 dark:text-blue-500;
+    }
+
+    a:hover {
+        @apply text-blue-400 dark:text-blue-300;
     }
 
     blockquote {
         @apply font-serif text-lg text-gray-700 bg-gray-100 italic border-l-4 border-gray-600 p-1 mx-6 my-2;
+        @apply dark:text-gray-200 dark:bg-zinc-800 dark:border-gray-400;
     }
 
     figure {
@@ -82,7 +81,7 @@
     }
 
     tr.even {
-        @apply bg-gray-100;
+        @apply bg-gray-100 dark:bg-zinc-900;
     }
 
     [class^="icon-"],
@@ -102,19 +101,16 @@
     }
 
     .menu-link {
-        @apply font-semibold text-xl m-2 p-2 no-underline;
-    }
-
-    .menu-link:hover {
-        @apply text-blue-400;
-    }
-
-    .home-logo {
-        font-family: 'Dancing Script';
-        @apply text-6xl;
+        @apply font-semibold m-2 px-1 no-underline text-sm sm:px-2 sm:text-base;
     }
 
     .title-logo {
         font-family: 'Dancing Script';
+        @apply text-black dark:text-zinc-300;
+    }
+
+    .page-title {
+        @apply text-3xl font-semibold pb-8 text-start font-serif sm:text-3xl;
+        @apply text-black dark:text-zinc-400;
     }
 }

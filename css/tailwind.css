@@ -699,10 +699,6 @@ video {
   padding-bottom: 2rem;
 }
 
-.pb-8 {
-  padding-bottom: 2rem;
-}
-
 .pt-8 {
   padding-top: 2rem;
 }
@@ -713,10 +709,6 @@ video {
 
 .pl-0 {
   padding-left: 0px;
-}
-
-.pb-4 {
-  padding-bottom: 1rem;
 }
 
 .pl-2 {
@@ -743,19 +735,9 @@ video {
   font-family: Noto Sans CJK SC, sans-serif;
 }
 
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-}
-
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
-}
-
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
 }
 
 .text-xl {
@@ -773,8 +755,9 @@ video {
   line-height: 1.75rem;
 }
 
-.font-semibold {
-  font-weight: 600;
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .font-thin {
@@ -785,8 +768,8 @@ video {
   font-weight: 500;
 }
 
-.font-bold {
-  font-weight: 700;
+.font-semibold {
+  font-weight: 600;
 }
 
 .italic {
@@ -801,6 +784,23 @@ video {
 .text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark\:bg-zinc-900 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(24 24 27 / var(--tw-bg-opacity));
+  }
+
+  .dark\:text-zinc-300 {
+    --tw-text-opacity: 1;
+    color: rgb(212 212 216 / var(--tw-text-opacity));
+  }
+
+  .dark\:text-gray-400 {
+    --tw-text-opacity: 1;
+    color: rgb(156 163 175 / var(--tw-text-opacity));
+  }
 }
 
 @media (min-width: 640px) {
@@ -823,14 +823,14 @@ video {
     font-family: IBM Plex Serif, Source Han Serif CN, serif;
   }
 
-  .sm\:text-3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-  }
-
   .sm\:text-4xl {
     font-size: 2.25rem;
     line-height: 2.5rem;
+  }
+
+  .sm\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
   }
 
   .sm\:font-normal {

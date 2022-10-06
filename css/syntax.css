@@ -78,7 +78,7 @@ pre.numberSource {
 }
 
 div.sourceCode {
-    background-color: #f8f8f8;
+    /* background-color: #f8f8f8; */
     padding: 0.5em;
     border-radius: 0.5em;
 }
@@ -90,7 +90,7 @@ div.sourceCode {
 }
 
 p>code {
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
     padding: 0.125em 0;
 }
 

@@ -1,11 +1,6 @@
-/* :root {
-    --color-primary: #EDF2F7;
-    --color-secondary: #CBD5E0;
-    --color-heading: #2D3748;
-    --color-body: #1A202C;
-} */
-
-/* ! tailwindcss v3.1.8 | MIT License | https://tailwindcss.com */
+/*
+! tailwindcss v3.1.8 | MIT License | https://tailwindcss.com
+*/
 
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -425,6 +420,20 @@ h1,
   margin-bottom: 1rem;
   font-family: IBM Plex Serif, Source Han Serif CN, serif;
   font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  h1, 
+    h2, 
+    h3, 
+    h4, 
+    h5, 
+    h6 {
+    --tw-text-opacity: 1;
+    color: rgb(161 161 170 / var(--tw-text-opacity));
+  }
 }
 
 h1 {
@@ -462,6 +471,25 @@ a {
   color: rgb(37 99 235 / var(--tw-text-opacity));
 }
 
+@media (prefers-color-scheme: dark) {
+  a {
+    --tw-text-opacity: 1;
+    color: rgb(59 130 246 / var(--tw-text-opacity));
+  }
+}
+
+a:hover {
+  --tw-text-opacity: 1;
+  color: rgb(96 165 250 / var(--tw-text-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  a:hover {
+    --tw-text-opacity: 1;
+    color: rgb(147 197 253 / var(--tw-text-opacity));
+  }
+}
+
 blockquote {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
@@ -479,6 +507,17 @@ blockquote {
   font-style: italic;
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  blockquote {
+    --tw-border-opacity: 1;
+    border-color: rgb(156 163 175 / var(--tw-border-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgb(39 39 42 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgb(229 231 235 / var(--tw-text-opacity));
+  }
 }
 
 figure {
@@ -541,21 +580,63 @@ td {
 
 .menu-link {
   margin: 0.5rem;
-  padding: 0.5rem;
-  font-size: 1.25rem;
-  line-height: 1.75rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   font-weight: 600;
   -webkit-text-decoration-line: none;
           text-decoration-line: none;
 }
 
-.menu-link:hover {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
+@media (min-width: 640px) {
+  .menu-link {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
 }
 
 .title-logo {
   font-family: 'Dancing Script';
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  .title-logo {
+    --tw-text-opacity: 1;
+    color: rgb(212 212 216 / var(--tw-text-opacity));
+  }
+}
+
+.page-title {
+  padding-bottom: 2rem;
+  text-align: start;
+  font-family: IBM Plex Serif, Source Han Serif CN, serif;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .page-title {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
+
+.page-title {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  .page-title {
+    --tw-text-opacity: 1;
+    color: rgb(161 161 170 / var(--tw-text-opacity));
+  }
 }
 
 *, ::before, ::after {
@@ -847,10 +928,6 @@ td {
   padding-bottom: 2rem;
 }
 
-.pb-8 {
-  padding-bottom: 2rem;
-}
-
 .pt-8 {
   padding-top: 2rem;
 }
@@ -861,10 +938,6 @@ td {
 
 .pl-0 {
   padding-left: 0px;
-}
-
-.pb-4 {
-  padding-bottom: 1rem;
 }
 
 .pl-2 {
@@ -891,19 +964,9 @@ td {
   font-family: Noto Sans CJK SC, sans-serif;
 }
 
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-}
-
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
-}
-
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
 }
 
 .text-xl {
@@ -921,8 +984,9 @@ td {
   line-height: 1.75rem;
 }
 
-.font-semibold {
-  font-weight: 600;
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .font-thin {
@@ -933,8 +997,8 @@ td {
   font-weight: 500;
 }
 
-.font-bold {
-  font-weight: 700;
+.font-semibold {
+  font-weight: 600;
 }
 
 .italic {
@@ -949,6 +1013,23 @@ td {
 .text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark\:bg-zinc-900 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(24 24 27 / var(--tw-bg-opacity));
+  }
+
+  .dark\:text-zinc-300 {
+    --tw-text-opacity: 1;
+    color: rgb(212 212 216 / var(--tw-text-opacity));
+  }
+
+  .dark\:text-gray-400 {
+    --tw-text-opacity: 1;
+    color: rgb(156 163 175 / var(--tw-text-opacity));
+  }
 }
 
 @media (min-width: 640px) {
@@ -971,14 +1052,14 @@ td {
     font-family: IBM Plex Serif, Source Han Serif CN, serif;
   }
 
-  .sm\:text-3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-  }
-
   .sm\:text-4xl {
     font-size: 2.25rem;
     line-height: 2.5rem;
+  }
+
+  .sm\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
   }
 
   .sm\:font-normal {
