@@ -1,27 +1,25 @@
-<div class="col-auto w-full sm:gap-10 font-serif">
+<div class="col-auto pt-1 w-full sm:gap-10 font-sans">
     $for(posts)$
     <div class="flex flex-col w-full">
-        <div class="p-2 py-4">
 
-            <a href="$url$" class="text-xl font-medium flex items-start justify-start w-full truncate py-4">
-                $title$
+        <a href="$url$" class="text-xl font-semibold flex items-start justify-start w-full truncate pb-4">
+            $title$
+        </a>
+
+        <div class="row flex-row flex justify-start">
+
+            $for(tags)$
+            <a href="/tags/$tag$.html" class="mr-2 text-sm text-neutral-600 dark:text-neutral-400">
+                $tag$
             </a>
-
-            <div class="row flex-row flex justify-start pl-1">
-
-                $for(tags)$
-                <a href="/tags/$tag$.html" class="mr-2 text-sm text-gray-600 dark:text-gray-400">
-                    $tag$
-                </a>
-                $endfor$
-
-            </div>
-
-            <div class="flex items-center justify-start pl-0 py-4 text-gray-600 font-mono dark:text-gray-400">
-                $date$
-            </div>
+            $endfor$
 
         </div>
+
+        <div class="flex items-center justify-start pl-0 pt-4 pb-12 text-neutral-600 dark:text-neutral-400">
+            $date$
+        </div>
+
     </div>
     $endfor$
 </div>

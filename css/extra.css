@@ -10,24 +10,24 @@
     h4,
     h5,
     h6 {
-        @apply font-semibold font-serif my-4;
-        @apply text-black dark:text-zinc-400;
+        @apply font-semibold font-sans my-4;
+        @apply text-neutral-700 dark:text-neutral-400;
     }
 
     h1 {
-        @apply text-4xl;
+        @apply text-2xl sm:text-3xl;
     }
 
     h2 {
-        @apply text-3xl;
+        @apply text-xl sm:text-2xl;
     }
 
     h3 {
-        @apply text-2xl;
+        @apply text-lg sm:text-xl;
     }
 
     h4 {
-        @apply text-xl;
+        @apply text-base sm:text-lg;
     }
 
     pre {
@@ -39,7 +39,7 @@
     }
 
     a {
-        @apply text-blue-600 dark:text-blue-500;
+        @apply text-blue-700 dark:text-blue-400;
     }
 
     a:hover {
@@ -47,8 +47,8 @@
     }
 
     blockquote {
-        @apply font-serif text-lg text-gray-700 bg-gray-100 italic border-l-4 border-gray-600 p-1 mx-6 my-2;
-        @apply dark:text-gray-200 dark:bg-zinc-800 dark:border-gray-400;
+        @apply font-sans text-neutral-700 bg-neutral-200 italic border-l-4 border-neutral-600 px-3 py-1 mx-1 my-2;
+        @apply dark:text-neutral-200 dark:bg-neutral-800 dark:border-neutral-400;
     }
 
     figure {
@@ -61,7 +61,7 @@
 
     ul,
     ol {
-        @apply ml-10 my-6;
+        @apply ml-5 my-6;
     }
 
     ul {
@@ -81,7 +81,7 @@
     }
 
     tr.even {
-        @apply bg-gray-100 dark:bg-zinc-900;
+        @apply bg-neutral-100 dark:bg-neutral-900;
     }
 
     [class^="icon-"],
@@ -97,20 +97,34 @@
 
         /* Better Font Rendering =========== */
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        -moz-osx-font-smoothing: neutralscale;
     }
 
     .menu-link {
-        @apply font-semibold m-2 px-1 no-underline text-sm sm:px-2 sm:text-base;
+        @apply font-semibold font-mono m-2 px-1 no-underline text-sm sm:px-2 sm:text-base;
+        @apply text-neutral-700 dark:text-neutral-400;
     }
 
     .title-logo {
         font-family: 'Dancing Script';
-        @apply text-black dark:text-zinc-300;
+        @apply text-2xl sm:text-5xl;
+        @apply text-neutral-800 dark:text-neutral-300;
     }
 
     .page-title {
-        @apply text-3xl font-semibold pb-8 text-start font-serif sm:text-3xl;
-        @apply text-black dark:text-zinc-400;
+        @apply text-3xl font-semibold pb-3 text-start font-sans sm:text-4xl;
+        @apply text-neutral-700 dark:text-neutral-400;
     }
+}
+
+@font-face {
+    font-family: 'OPPO Sans';
+    font-weight: 400;
+    src: url('../fonts/OPPOSans-R.ttf') format('TrueType');
+}
+
+@font-face {
+    font-family: 'OPPO Sans';
+    font-weight: 600;
+    src: url('../fonts/OPPOSans-B.ttf') format('TrueType');
 }

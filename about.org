@@ -1,0 +1,15 @@
+---
+title: About
+---
+* 关于我
+
++ [[https://github.com/stephanoskomnenos][GitHub]]
++ [[https://t.me/stephanos_komnenos][Telegram]]
+
+* 关于这个网站
+
+这是一个用 Hakyll 生成的静态网站。
+
+原先用的是 Hugo + ox-hugo，后来在某一天下午看到了 Hakyll，于是就换成了 Hakyll。
+
+Hakyll 的定制化程度很高，甚至没有比较通用的预设模板，于是自己写了一个简单的主题。

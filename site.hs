@@ -10,7 +10,7 @@ import Hakyll
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
-  match "images/*" $ do
+  match (fromGlob "images/*" .||. fromGlob "fonts/*") $ do
     route idRoute
     compile copyFileCompiler
 
@@ -18,7 +18,7 @@ main = hakyll $ do
     route idRoute
     compile compressCssCompiler
 
-  match (fromList ["about.md"]) $ do
+  match (fromList ["about.org"]) $ do
     route $ setExtension "html"
     compile $
       pandocMathCompiler
