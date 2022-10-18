@@ -161,3 +161,7 @@ dist
 
 # VSCode
 .vscode
+
+# tailwindcss
+css/tailwind.css
+css/tailwind-extra.css
