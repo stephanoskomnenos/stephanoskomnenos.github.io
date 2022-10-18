@@ -248,9 +248,9 @@ code span.wa {
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
     p>code,li>code {
-        background-color: #262626;
+        background-color: #404040;
     }
     div.sourceCode {
-        background-color: #262626;
+        background-color: #404040;
     }
 }
