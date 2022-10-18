@@ -47,7 +47,7 @@
     }
 
     blockquote {
-        @apply font-sans text-neutral-700 bg-neutral-200 italic border-l-4 border-neutral-600 px-3 py-1 mx-1 my-2;
+        @apply font-sans text-neutral-700 bg-neutral-300 italic border-l-4 border-neutral-600 px-3 py-1 mx-1 my-2;
         @apply dark:text-neutral-200 dark:bg-neutral-700 dark:border-neutral-400;
     }
 
@@ -81,7 +81,7 @@
     }
 
     tr.even {
-        @apply bg-neutral-100 dark:bg-neutral-900;
+        @apply bg-neutral-100 dark:bg-neutral-700;
     }
 
     [class^="icon-"],
