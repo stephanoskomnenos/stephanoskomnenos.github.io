@@ -13,7 +13,7 @@
     h4,
     h5,
     h6 {
-        @apply my-4 font-sans font-semibold text-neutral-700 dark:text-neutral-400;
+        @apply my-4 font-sans font-semibold;
     }
 
     h1 {
@@ -41,15 +41,15 @@
     }
 
     a {
-        @apply text-blue-700 dark:text-blue-400;
+        @apply text-blue-500 dark:text-blue-300;
     }
 
     a:hover {
-        @apply text-blue-400 dark:text-blue-300;
+        @apply text-blue-300 dark:text-blue-200;
     }
 
     blockquote {
-        @apply py-1 px-3 my-2 mx-1 font-sans italic border-l-4 text-neutral-700 bg-neutral-300 border-neutral-600 dark:text-neutral-200 dark:bg-neutral-700 dark:border-neutral-400;
+        @apply py-1 px-3 my-2 mx-1 font-sans italic border-l-4 bg-gray-300 border-gray-600 dark:bg-zinc-600 dark:border-zinc-400;
     }
 
     figure {
@@ -78,20 +78,24 @@
     }
 
     th, td {
-        @apply py-2 px-4 border border-neutral-700 dark:border-neutral-300;
+        @apply py-2 px-4 border border-gray-700 dark:border-zinc-300;
     }
 
     .menu-link {
-        @apply flex-1 py-2 m-1 font-mono text-xs font-semibold no-underline sm:px-2 sm:text-base text-neutral-700 dark:text-neutral-400;
+        @apply flex-1 pt-2 m-1 font-sans text-xs font-semibold no-underline sm:px-2 sm:text-base text-gray-800 dark:text-zinc-300;
     }
 
     .title-logo {
         font-family: 'Dancing Script';
-        @apply text-2xl sm:text-5xl text-neutral-800 dark:text-neutral-300;
+        @apply text-2xl sm:text-5xl text-gray-700 dark:text-zinc-300;
     }
 
     .page-title {
-        @apply font-sans text-2xl font-semibold sm:pb-3 sm:text-4xl text-start text-neutral-700 dark:text-neutral-400;
+        @apply font-sans text-2xl font-semibold sm:pb-3 sm:text-4xl text-start;
+    }
+
+    .post-list-title {
+        @apply text-gray-600 dark:text-zinc-300;
     }
 }
 

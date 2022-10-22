@@ -1,15 +1,15 @@
-$partial("templates/post-list.html")$
+$partial("templates/article-list.html")$
 
 <div class="flex flex-row w-full">
 $if(previousPageNum)$
-<div class="flex-1">
-<a href="$previousPageUrl$">◀ Newer Entries</a>
-</div>
+    <div class="flex-1">
+        <a href="$previousPageUrl$">◀ Newer Entries</a>
+    </div>
 $endif$
 
 $if(nextPageNum)$
-<div class="flex-none">
-<a href="$nextPageUrl$">Older Entries ▶</a>
-</div>
+    <div class="flex-none">
+        <a href="$nextPageUrl$">Older Entries ▶</a>
+    </div>
 $endif$
 </div>

@@ -1,0 +1,29 @@
+<div class="font-sans sm:text-lg text-start">
+    $date$
+    $if(author)$
+    by $author$
+    $endif$
+</div>
+<div class="py-2 sm:font-mono row">
+    $if(tags)$
+    <span class="text-sm">
+        Tags:
+    </span>
+    $endif$
+
+    $for(tags)$
+    <a href="/tags/$tag$.html" class="text-sm">
+        $tag$
+    </a>
+    $endfor$
+</div>
+$if(cover)$
+<div class="pt-4 pb-2">
+    <img class="object-cover w-full h-96 rounded-lg shadow-lg" src="$cover$"/>
+</div>
+$endif$
+<section class="pb-10 font-sans text-sm sm:text-base">
+    $body$
+</section>
+
+$partial("templates/giscus.html")$
