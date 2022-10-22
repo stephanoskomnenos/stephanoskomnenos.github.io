@@ -71,7 +71,7 @@ tags: 6.824, distributed system
 * 2B: Log
 
 在 2A 基础上加入日志操作：
-+ Leader 上任时将除自己之外的每个实例的 =matchIndex= 设为 0, =nextIndex= 设为 =len(log)= 。
++ Leader 上任时将除自己之外的每个实例的 =matchIndex= 设为 0， =nextIndex= 设为 =len(log)= 。
 + Leader 通过 AppendEntries 发送新日志，follower 经过检查后决定是否追加这部分日志。
 + Leader 收到 follower 已追加日志的回复后，更新 =matchIndex[follower]= 及 =nextIndex[follower]= ，若符合条件（见 Figure 2）更新
   =commitIndex= 。
@@ -83,7 +83,7 @@ tags: 6.824, distributed system
 ** 注意事项
 
 + 在身份可能被别的 goroutine 改变时（即释放锁再重新获得锁之后），先确认身份再执行操作。
-+ Leader 追加日志请求被拒绝时降低 =nextIndex= 的方式如果时每次减 1,则效率太低，可能通不过 2C 的测试。
++ Leader 追加日志请求被拒绝时降低 =nextIndex= 的方式如果时每次减 1，则效率太低，可能通不过 2C 的测试。
   [[https://thesquareplanet.com/blog/students-guide-to-raft/#an-aside-on-optimizations][Students' Guide to Raft]] 给出了优化方法。
 
 ** 日志提交

@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+    body {
+        @apply font-medium sm:font-normal;
+    }
 
     h1,
     h2,
@@ -10,8 +13,7 @@
     h4,
     h5,
     h6 {
-        @apply font-semibold font-sans my-4;
-        @apply text-neutral-700 dark:text-neutral-400;
+        @apply my-4 font-sans font-semibold text-neutral-700 dark:text-neutral-400;
     }
 
     h1 {
@@ -47,8 +49,7 @@
     }
 
     blockquote {
-        @apply font-sans text-neutral-700 bg-neutral-300 italic border-l-4 border-neutral-600 px-3 py-1 mx-1 my-2;
-        @apply dark:text-neutral-200 dark:bg-neutral-700 dark:border-neutral-400;
+        @apply py-1 px-3 my-2 mx-1 font-sans italic border-l-4 text-neutral-700 bg-neutral-300 border-neutral-600 dark:text-neutral-200 dark:bg-neutral-700 dark:border-neutral-400;
     }
 
     figure {
@@ -56,12 +57,12 @@
     }
 
     figcaption {
-        @apply italic my-2 text-sm;
+        @apply my-2 text-sm italic;
     }
 
     ul,
     ol {
-        @apply ml-5 my-6;
+        @apply my-6 ml-5;
     }
 
     ul {
@@ -73,58 +74,41 @@
     }
 
     table {
-        @apply table-auto;
+        @apply block overflow-auto table-auto;
     }
 
-    td {
-        @apply border px-4 py-2;
-    }
-
-    tr.even {
-        @apply bg-neutral-100 dark:bg-neutral-700;
-    }
-
-    [class^="icon-"],
-    [class*=" icon-"] {
-        /* use !important to prevent issues with browser extensions that change fonts */
-        font-family: 'icomoon' !important;
-        speak: never;
-        font-style: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
-        line-height: 1;
-
-        /* Better Font Rendering =========== */
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: neutralscale;
+    th, td {
+        @apply py-2 px-4 border border-neutral-700 dark:border-neutral-300;
     }
 
     .menu-link {
-        @apply font-semibold font-mono m-1 no-underline text-xs sm:px-2 sm:text-base;
-        @apply text-neutral-700 dark:text-neutral-400;
+        @apply flex-1 py-2 m-1 font-mono text-xs font-semibold no-underline sm:px-2 sm:text-base text-neutral-700 dark:text-neutral-400;
     }
 
     .title-logo {
         font-family: 'Dancing Script';
-        @apply text-2xl sm:text-5xl;
-        @apply text-neutral-800 dark:text-neutral-300;
+        @apply text-2xl sm:text-5xl text-neutral-800 dark:text-neutral-300;
     }
 
     .page-title {
-        @apply text-3xl font-semibold pb-3 text-start font-sans sm:text-4xl;
-        @apply text-neutral-700 dark:text-neutral-400;
+        @apply font-sans text-2xl font-semibold sm:pb-3 sm:text-4xl text-start text-neutral-700 dark:text-neutral-400;
     }
 }
 
 @font-face {
     font-family: 'OPPO Sans';
     font-weight: 400;
-    src: url('../fonts/OPPOSans-R.ttf') format('TrueType');
+    src: url('../fonts/OPPOSans-R.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'OPPO Sans';
+    font-weight: 500;
+    src: url('../fonts/OPPOSans-M.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'OPPO Sans';
     font-weight: 600;
-    src: url('../fonts/OPPOSans-B.ttf') format('TrueType');
+    src: url('../fonts/OPPOSans-B.woff2') format('woff2');
 }

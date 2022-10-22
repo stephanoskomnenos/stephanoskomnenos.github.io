@@ -1,10 +1,10 @@
-<p class="text-lg text-start font-light sm:font-normal font-mono">
+<p class="font-mono sm:text-lg text-start">
     $date$
     $if(author)$
     by $author$
     $endif$
 </p>
-<div class="row pb-12 font-light sm:font-normal sm:font-mono">
+<div class="pb-2 sm:pb-8 sm:font-mono row">
 
     $if(tags)$
     <span class="text-sm">
@@ -19,6 +19,8 @@
     $endfor$
 
 </div>
-<section class="prose text-sm sm:text-base lg:prose-xl font-sans">
+<section class="pb-10 font-sans text-sm sm:text-base prose lg:prose-xl">
     $body$
 </section>
+
+$partial("templates/giscus.html")$

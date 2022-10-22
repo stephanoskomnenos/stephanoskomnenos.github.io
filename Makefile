@@ -1,16 +1,20 @@
-all: build
+all: gen
 
 listen: build
 	cabal exec site watch & \
 	npx tailwindcss -i ./css/extra.css -o ./css/tailwind-extra.css -w & \
 	npx tailwindcss -o ./css/tailwind.css -w
 
-build:
-	cabal build && \
-	npx tailwindcss -i ./css/extra.css -o ./css/tailwind-extra.css && \
-	npx tailwindcss -o ./css/tailwind.css && \
+gen: tailwind build
 	cabal exec site build
 
+build:
+	cabal build
+
+tailwind:
+	npx tailwindcss -i ./css/extra.css -o ./css/tailwind-extra.css && \
+	npx tailwindcss -o ./css/tailwind.css
+
 clean:
-	rm -r _cache _site & \
+	rm -r _cache & \
 	rm css/tailwind.css css/tailwind-extra.css

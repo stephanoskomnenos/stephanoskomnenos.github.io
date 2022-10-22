@@ -45,6 +45,23 @@ main = hakyll $ do
         >>= loadAndApplyTemplate "templates/default.html" ctx
         >>= relativizeUrls
 
+  -- paginate
+  pag <- buildPaginateWith grouper "posts/*" makeId
+
+  paginateRules pag $ \pageNum pattern -> do
+    route idRoute
+    compile $ do
+      posts <- recentFirst =<< loadAll pattern
+      let paginateCtx =
+            listField "posts" postCtx (return posts)
+              `mappend` constField "title" "Posts"
+              `mappend` paginateContext pag pageNum
+              `mappend` defaultContext 
+      makeItem ""
+        >>= loadAndApplyTemplate "templates/archive.html" paginateCtx
+        >>= loadAndApplyTemplate "templates/default.html" paginateCtx
+        >>= relativizeUrls
+
   match "posts/*" $ do
     route $ setExtension "html"
     compile $
@@ -63,23 +80,6 @@ main = hakyll $ do
       getResourceBody
         >>= applyAsTemplate indexCtx
         >>= loadAndApplyTemplate "templates/default.html" indexCtx
-        >>= relativizeUrls
-
-  -- paginate
-  pag <- buildPaginateWith grouper "posts/*" makeId
-
-  paginateRules pag $ \pageNum pattern -> do
-    route idRoute
-    compile $ do
-      posts <- recentFirst =<< loadAll pattern
-      let paginateCtx =
-            listField "posts" postCtx (return posts)
-              `mappend` constField "title" ("Page " ++ show pageNum)
-              `mappend` paginateContext pag pageNum
-              `mappend` defaultContext 
-      makeItem ""
-        >>= loadAndApplyTemplate "templates/archive.html" paginateCtx
-        >>= loadAndApplyTemplate "templates/default.html" paginateCtx
         >>= relativizeUrls
 
 --------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ pandocMathCompiler =
 
 --------------------------------------------------------------------------------
 grouper :: (MonadMetadata m, MonadFail m) => [Identifier] -> m [[Identifier]]
-grouper = fmap (paginateEvery 10) . sortRecentFirst
+grouper = fmap (paginateEvery 30) . sortRecentFirst
 
 makeId :: PageNumber -> Identifier
-makeId pageNum = fromFilePath $ "posts/" ++ show pageNum ++ "/index.html"
+makeId pageNum = fromFilePath $ "posts/page/" ++ show pageNum ++ "/index.html"

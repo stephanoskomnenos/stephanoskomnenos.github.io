@@ -5,6 +5,7 @@ title: About
 
 + [[https://github.com/stephanoskomnenos][GitHub]]
 + [[https://t.me/stephanos_komnenos][Telegram]]
++ [[mailto:linjt267@outlook.com][Email]]
 
 * 关于这个网站
 
