@@ -81,7 +81,7 @@
     
 
 </div>
-<section class="font-sans text-sm sm:text-base prose lg:prose-xl">
+<section class="pb-10 font-sans text-sm sm:text-base prose lg:prose-xl">
     <h1 id="a-leader-election">2A: Leader Election</h1>
 <p>2A 部分需要完成选举和 leader 发送心跳。</p>
 <p><strong>关键步骤在 Figure 2 上有非常详细的指示，一定要全部看完。</strong></p>
@@ -222,20 +222,8 @@
 <p>这里推荐一个并行执行测试的脚本： <a href="https://gist.github.com/jonhoo/f686cacb4b9fe716d5aa">go-test-many.sh</a></p>
 </section>
 
-<div id="gitalk-container" class="pt-6"></div>
-<script>
-const gitalk = new Gitalk({
-  clientID: 'f6529c11f069742b9e4f',
-  clientSecret: '0badcf70dc4fe1fb135c8ac95dcfc31bea6f590e',
-  repo: 'blog-comments',
-  owner: 'AnatolyKomninov',
-  admin: ['AnatolyKomninov'],
-  id: location.pathname,      // Ensure uniqueness and length less than 50
-  distractionFreeMode: false  // Facebook-like distraction free mode
-})
-gitalk.render('gitalk-container')
+<script src="https://giscus.app/client.js" data-repo="stephanoskomnenos/stephanoskomnenos.github.io" data-repo-id="R_kgDOGu1U-w" data-category="General" data-category-id="DIC_kwDOGu1U-84CSImR" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by Gitalk.</a></noscript>
 
     </section>
 
