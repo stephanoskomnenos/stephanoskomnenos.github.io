@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teahouse Smyrna - Git Workflow</title>
+    <link rel="stylesheet" href="../../css/tailwind.css" />
+    <link rel="stylesheet" href="../../css/tailwind-extra.css" />
+    <link rel="stylesheet" href="../../css/syntax.css" />
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <!-- mathjax -->
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+
+<body class="h-full text-gray-700 bg-gray-50 dark:bg-zinc-900 dark:text-zinc-300">
+
+    <section class="sticky top-0 py-2 w-full bg-gray-100 shadow-md sm:py-4 dark:bg-zinc-700">
+
+        <div class="flex flex-row justify-between items-center px-6 mx-auto max-w-3xl">
+            <div class="flex-1 justify-start">
+                <div class="flex flex-shrink-0 items-center text-2xl">
+                    <a href="../../index.html" class="title-logo">
+                        Teahouse Smyrna
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex flex-row justify-end space-x-2 font-mono font-light sm:space-x-10 sm:font-normal flex-0">
+                <a href="../../" class="menu-link">
+                    Home
+                </a>
+                <a href="../../posts/page/1/index.html" class="menu-link">
+                    Archives
+                </a>
+                <a href="../../about.html" class="menu-link">
+                    About
+                </a>
+            </div>
+        </div>
+
+    </section>
+
+
+    <section class="justify-center items-start px-6 pb-8 mx-auto mt-2 max-w-3xl sm:mt-4 md:rounded">
+        <div class="pt-2 sm:pt-4"></div>
+<!-- 
+        
+        <p id="page-title" class="page-title">
+            Git Workflow
+        </p>
+         -->
+
+        <div class="rounded-2xl shadow-xl px-6 py-6 bg-gray-100 dark:bg-zinc-700">
+    <p id="page-title" class="page-title">
+        Git Workflow
+    </p>
+    <div class="font-sans sm:text-lg text-start">
+    May 20, 2022
+    
+</div>
+<div class="py-2 sm:font-mono row">
+    
+    <span class="text-sm">
+        Tags:
+    </span>
+    
+
+    
+    <a href="../../tags/git.html" class="text-sm">
+        git
+    </a>
+    
+</div>
+
+<div class="pt-4 pb-2">
+    <img class="h-96 w-full object-cover rounded-lg shadow-lg" src="../../posts/2022-05-20-git-workflow/cover.jpg" />
+</div>
+
+<section class="pb-10 font-sans text-sm sm:text-base">
+    <p>JetBrains 家的 IDE 真是太好用了（还有谁在用命令行？</p>
+<h1 id="undoing-commits-changes">Undoing Commits &amp; Changes</h1>
+<h2 id="git-revert">git revert</h2>
+<p><code class="verbatim">git revert &lt;commit&gt;</code></p>
+<p>通过在新的 commit 中回退旧 commit 的修改来撤销旧 commit，不改动原有的 commit 树。</p>
+<h2 id="git-reset">git reset</h2>
+<p><code class="verbatim">git reset [--soft | --mixed | --hard] &lt;commit&gt;</code></p>
+<p>回退到指定的 commit。</p>
+<p><code class="verbatim">--hard</code> ：（危险操作）回退 HEAD，working directory 以及 staging index。</p>
+<p><code class="verbatim">--soft</code> ：仅回退 HEAD。 (IDEA 里的 Undo Commit 就是 <code class="verbatim">git reset --soft HEAD^</code>)</p>
+<p><code class="verbatim">--mixed</code> ：（默认）回退 HEAD 和 staging index。</p>
+<h2 id="git-rm">git rm</h2>
+<p><code class="verbatim">git rm [--cached] [-f] [-r] &lt;file&gt;</code></p>
+<p>在工作区或暂存区移除文件。</p>
+<p><code class="verbatim">-f</code> ：force，当文件在工作区已有修改时使用。</p>
+<p><code class="verbatim">--cached</code> ：仅移除 staged index 中的文件，不改动工作区。</p>
+<h1 id="rewriting-history">Rewriting history</h1>
+<h2 id="git-commit-amend">git commit –amend</h2>
+<p><code class="verbatim">git commit --amend [-m &lt;msg&gt;]</code></p>
+<p>修改上一次的 commit。（commit id 也会改变）</p>
+<h2 id="git-rebase">git rebase</h2>
+<p><code class="verbatim">git rebase [&lt;upstream&gt; [&lt;branch&gt;]]</code></p>
+<p>从当前分支与 upstream 的共祖开始，将 upstream 上的修改合并到当前分支。</p>
+<h3 id="如果冲突">如果冲突</h3>
+<p><code class="verbatim">--abort</code> : 放弃 rebase，回到操作前的状态。</p>
+<p><code class="verbatim">--continue</code> : 在修复冲突之后，使用 <code class="verbatim">git add &lt;file&gt;</code> 更新 index，再执行此命令继续 rebase。</p>
+<p><code class="verbatim">--skip</code> : 跳过冲突的 commit。</p>
+<h1 id="merge-vs.-rebase">Merge vs. Rebase</h1>
+<p>Rebase 不会产生新的 “Merge commit” ，最后得到的 commit history 是线性的。</p>
+<h2 id="the-golden-rule-of-rebasing">The Golden Rule of Rebasing</h2>
+<p>不要在公共分支上 rebase，否则需要 force push，这样会改动 commit history。</p>
+<h1 id="gpg-sign">GPG Sign</h1>
+<p>参见以下链接（笑：</p>
+<p><a href="https://github.com/torvalds/linux/tree/8bcab0346d4fcf21b97046eb44db8cf37ddd6da0">https://github.com/torvalds/linux/tree/8bcab0346d4fcf21b97046eb44db8cf37ddd6da0</a></p>
+<p>github 仅通过 commit 所用的邮箱判断提交者，在有操作权限的仓库中可以伪造出任何人的提交记录。</p>
+<p>如果要防止别人伪装成自己提交 commit，可以用 GPG 签名自己的 commit。</p>
+<p><img src="../images/2022-05-20_22-51-28_screenshot.png" /></p>
+<p>经过签名的 commit 在 github 上会显示 “Verified” 标签。</p>
+<p>详见 Github 文档：</p>
+<p><a href="https://docs.github.com/en/enterprise-server@3.5/authentication/managing-commit-signature-verification">Managing commit signature verification - GitHub Docs</a></p>
+</section>
+
+<script src="https://giscus.app/client.js" data-repo="stephanoskomnenos/stephanoskomnenos.github.io" data-repo-id="R_kgDOGu1U-w" data-category="General" data-category-id="DIC_kwDOGu1U-84CSImR" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+</script>
+
+</div>
+
+    </section>
+
+    <footer class="bottom-0 mt-6 w-full h-8 text-sm sm:h-14 sm:text-sm">
+        <div class="font-sans text-center">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll" class="italic">Hakyll</a>
+        </div>
+    </footer>
+</body>
+
+</html>
