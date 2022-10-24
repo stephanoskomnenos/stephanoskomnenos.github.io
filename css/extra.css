@@ -91,7 +91,7 @@
     }
 
     .page-title {
-        @apply font-sans text-2xl font-semibold sm:pb-3 sm:text-4xl text-start;
+        @apply font-sans text-2xl font-semibold sm:pb-3 sm:text-4xl text-start text-ellipsis overflow-hidden;
     }
 
     .post-list-title {

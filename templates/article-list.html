@@ -1,8 +1,13 @@
-<div class="col-auto w-full font-sans sm:gap-10">
+<div class="max-w-xs font-sans sm:max-w-2xl overflow-clip">
     $for(posts)$
-    <div class="flex flex-row justify-items-center py-6 px-8 my-6 w-full bg-gray-100 rounded-xl shadow-md dark:bg-zinc-700">
-        <div class="flex flex-col flex-1">
-            <a href="$url$" class="flex justify-start pb-4 w-full text-xl font-semibold post-list-title truncate">
+    <div class="flex flex-col items-start mt-8 mb-10 w-full bg-gray-100 rounded-3xl border-2 border-gray-200 sm:flex-row hover:shadow-md dark:border-zinc-600 dark:bg-zinc-700">
+        $if(cover)$
+        <a class="flex-0 min-w-fit" href="$url$">
+            <img class="object-cover w-80 h-56 rounded-3xl shadow-sm sm:w-60 sm:h-44" src="$cover$" loading="lazy"/>
+        </a>
+        $endif$
+        <div class="flex flex-col flex-1 justify-center px-6 sm:px-16 sm:h-44">
+            <a href="$url$" class="flex justify-start py-4 text-xl font-semibold post-list-title">
                 $title$
             </a>
             <div class="flex flex-row justify-start">
@@ -12,12 +17,9 @@
                 </a>
                 $endfor$
             </div>
-            <div class="flex justify-start pt-4">
+            <div class="flex justify-start pt-4 pb-5">
                 $date$
             </div>
-        </div>
-        <div class="invisible sm:visible flex-0">
-            <img class="block object-cover w-40 h-28 rounded-lg shadow-sm" src="$cover$"/>
         </div>
     </div>
     $endfor$

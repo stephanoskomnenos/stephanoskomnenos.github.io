@@ -1,0 +1,171 @@
+---
+title: 6.824 Lab 2 Raft (2A-2C)
+tags: 6.824, distributed system
+cover: cover.png
+---
+
+* 2A: Leader Election
+
+2A 部分需要完成选举和 leader 发送心跳。
+
+*关键步骤在 Figure 2 上有非常详细的指示，一定要全部看完。*
+
+** 流程概述
+
++ 启动时上层 tester 调用 =Make()= ，每个 raft 实例都初始化为 follower，并各自随机设定 election timeout。
+
++ 到达 election timeout 后，raft 实例转化为 candidate，发起选举，设置 =currentTerm= 自增 1，并向其他实例发送 RequestVote RPC 请求投票，
+  若得票过半则转化为 leader。
+
++ 实例收到投票请求时，对符合条件（详见 Figure 2）的候选人投票。
+
++ Leader 需要定时向其余实例发送 AppendEntries RPC 作为心跳包。
+
++ 对所有实例：若收到 RPC request 或 reply 中 term =T= 大于 =currentTerm= ，则更新 =currentTerm= 为 =T= ，并转化为 follower。
+
+** 定时器以及主循环
+
+这里用到了两个 =time.Timer= ，分别控制选举和心跳。主循环（即 =ticker()= ）内使用 =select case= 语句读取 timer channel，
+执行对应操作。（实验指导不建议用 =time.Timer= ，这里并没有按照指示）
+
+#+begin_src go
+  const (
+    HeartbeatInterval    = 100 * time.Millisecond
+    ElectionBaseInterval = 1500 * time.Millisecond
+  )
+
+  func heartbeatDuration() time.Duration {
+    return HeartbeatInterval
+  }
+
+  func electionRandomDuration() time.Duration {
+    rand.Seed(time.Now().UnixMicro())
+    return ElectionBaseInterval + time.Millisecond*time.Duration(rand.Intn(150))
+  }
+
+  func (rf *Raft) ticker() {
+    for rf.killed() == false {
+
+      select {
+      case <-rf.electionTimer.C:
+        rf.mu.Lock()
+        rf.convertTo(RfCandidate)
+        rf.currentTerm += 1
+        rf.startElection()
+        rf.electionTimer.Reset(electionRandomDuration())
+        rf.mu.Unlock()
+
+      case <-rf.heartbeatTimer.C:
+        rf.mu.Lock()
+        if rf.state == RfLeader {
+          rf.broadcastHeartbeat()
+        }
+        rf.mu.Unlock()
+      }
+
+    }
+  }
+#+end_src
+
+另外，在 =broadcastHeartbeat()= 末尾重设 heartbeatTimer，在 =RequestVote()= 确认投票时以及转化为 leader 时重设 electionTimer。
+
+* 2B: Log
+
+在 2A 基础上加入日志操作：
++ Leader 上任时将除自己之外的每个实例的 =matchIndex= 设为 0， =nextIndex= 设为 =len(log)= 。
++ Leader 通过 AppendEntries 发送新日志，follower 经过检查后决定是否追加这部分日志。
++ Leader 收到 follower 已追加日志的回复后，更新 =matchIndex[follower]= 及 =nextIndex[follower]= ，若符合条件（见 Figure 2）更新
+  =commitIndex= 。
++ Leader 的追加日志请求若被拒绝，则降低 =nextIndex[follower]= 。
++ RequestVote 中加入对候选人日志的检查。
++ 对所有实例：若 =commitIndex > lastApplied= ，则发送 =log[lastApplied+1:commitIndex+1]= 到上层 server（即 tester），
+  并更新 =lastApplied = commitIndex= 。
+
+** 注意事项
+
++ 在身份可能被别的 goroutine 改变时（即释放锁再重新获得锁之后），先确认身份再执行操作。
++ Leader 追加日志请求被拒绝时降低 =nextIndex= 的方式如果时每次减 1，则效率太低，可能通不过 2C 的测试。
+  [[https://thesquareplanet.com/blog/students-guide-to-raft/#an-aside-on-optimizations][Students' Guide to Raft]] 给出了优化方法。
+
+** 日志提交
+
+对所有实例：若 =commitIndex > lastApplied= ，则调用 =sendApplyMsg()= ，
+发送 =log[lastApplied+1:commitIndex+1]= 到上层 server（即 tester），并更新 =lastApplied = commitIndex= 。
+
+#+begin_src go
+type ApplyMsg struct {
+	CommandValid bool
+	Command      interface{}
+	CommandIndex int
+
+	// For 2D:
+	SnapshotValid bool
+	Snapshot      []byte
+	SnapshotTerm  int
+	SnapshotIndex int
+}
+
+func (rf *Raft) sendApplyMsg() {
+	rf.applyMu.Lock()
+	defer rf.applyMu.Unlock()
+
+	rf.mu.Lock()
+	lastApplied := rf.lastApplied
+	logs := make([]LogEntry, rf.commitIndex-rf.lastApplied)
+	copy(logs, rf.log[rf.lastApplied+1:rf.commitIndex+1])
+	rf.lastApplied += len(logs)
+
+	DPrintf("ApplyMsg: raft %d sending logs from index %d to %d", rf.me, lastApplied+1, rf.commitIndex)
+	rf.mu.Unlock()
+
+	for i, log := range logs {
+		applyMsg := ApplyMsg{
+			CommandValid: true,
+			Command:      log.Command,
+			CommandIndex: lastApplied + 1 + i,
+		}
+
+		DPrintf("ApplyMsg: raft %d, send log with index %d", rf.me, lastApplied+1+i)
+
+		rf.applyCh <- applyMsg
+	}
+}
+#+end_src
+
+** =nextIndex= 回溯查找的优化方法
+
+#+begin_quote
++ If a follower does not have =prevLogIndex= in its log, it should return with =conflictIndex = len(log)= and =conflictTerm = None= .
++ If a follower does have =prevLogIndex= in its log, but the term does not match, it should return =conflictTerm = log[prevLogIndex].Term= , and then search its log for the first index whose entry has term equal to =conflictTerm=.
++ Upon receiving a conflict response, the leader should first search its log for =conflictTerm=. If it finds an entry in its log with that term, it should set nextIndex to be the one beyond the index of the last entry in that term in its log.
++ If it does not find an entry with that term, it should set =nextIndex = conflictIndex=.
+#+end_quote
+
+这里实现了简化版本，即只有 =conflictIndex= 。
+#+begin_src go
+  // in AppendEntries()
+  conflictTerm := rf.log[args.PrevLogIndex].Term
+  reply.ConflictIndex = 1
+  rf.log = rf.log[:args.PrevLogIndex]
+  for i, logEntry := range rf.log {
+    if logEntry.Term == conflictTerm {
+      reply.ConflictIndex = i
+      break
+    }
+  }
+#+end_src
+
+#+begin_src go
+  // in broadcastHeartbeat()
+  if reply.ConflictIndex != -1 {
+    rf.nextIndex[follower] = reply.ConflictIndex
+  }
+#+end_src
+
+* 2C: Persistence
+
+2C 的任务本身比较简单，即在需要持久化的状态改变时执行 =persist()= 。
+
+然而 2C 的测试比较严格，会将之前的一些问题暴露出来，导致需要从命令行输出中找 bug。这是个非常痛苦的过程。
+
+这里推荐一个并行执行测试的脚本： [[https://gist.github.com/jonhoo/f686cacb4b9fe716d5aa][go-test-many.sh]]

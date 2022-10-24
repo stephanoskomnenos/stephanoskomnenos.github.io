@@ -1,21 +1,32 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 
-import Data.Maybe
+import Codec.Picture (decodeImage)
+import Codec.Picture.Saving (imageToJpg)
+import Data.ByteString (ByteString)
+import Data.ByteString.Lazy (toStrict)
+import Data.Maybe (fromMaybe)
 import Data.Monoid (mappend)
 import qualified Data.Set as S
 import Data.String (fromString)
 import Data.Tree (flatten)
 import Hakyll
-import Text.Pandoc.Options
+import Hakyll.Core.Compiler
 import System.FilePath
+import Text.Pandoc.Options
 
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
-  match (fromGlob "images/*" .||. fromGlob "fonts/*" .||. imagePattern) $ do
+  match (fromGlob "fonts/*" .||. otherImagePattern) $ do
     route idRoute
     compile copyFileCompiler
+
+  match jpgOrPngPattern $ do
+    route idRoute
+    compile $
+      loadImage
+        >>= compressImageCompiler 60
 
   match "css/**" $ do
     route idRoute
@@ -27,7 +38,7 @@ main = hakyll $ do
     route $ setExtension "html"
     compile $
       pandocMathCompiler
-        >>= loadAndApplyTemplate "templates/card.html" defaultContext
+        >>= loadAndApplyTemplate "templates/article-card.html" defaultContext
         >>= loadAndApplyTemplate "templates/default.html" defaultContext
         >>= relativizeUrls
 
@@ -70,7 +81,7 @@ main = hakyll $ do
     compile $
       pandocMathCompiler
         >>= loadAndApplyTemplate "templates/article-content.html" postCtx
-        >>= loadAndApplyTemplate "templates/card.html" postCtx
+        >>= loadAndApplyTemplate "templates/article-card.html" postCtx
         >>= loadAndApplyTemplate "templates/default.html" postCtx
         >>= relativizeUrls
 
@@ -89,14 +100,24 @@ main = hakyll $ do
 --------------------------------------------------------------------------------
 postPattern :: Pattern
 postPattern = do
-  let extensions = [".md", ".org", ".rst"]
+  let extensions = [".md", ".markdown", ".org", ".rst"]
       patterns = map (fromGlob . ("posts/**" ++)) extensions
   foldl1 (.||.) patterns
 
-imagePattern :: Pattern
-imagePattern = do
-  let extensions = [".jpg", ".jpeg", ".png", ".ico", ".bmp"]
-      patterns = map (fromGlob . ("posts/**" ++)) extensions
+jpgOrPngPattern :: Pattern
+jpgOrPngPattern = do
+  let extensions = [".jpg", ".jpeg", ".png"]
+      patterns =
+        map (fromGlob . ("posts/**" ++)) extensions
+          <> map (fromGlob . ("images/**" ++)) extensions
+  foldl1 (.||.) patterns
+
+otherImagePattern :: Pattern
+otherImagePattern = do
+  let extensions = [".ico", ".bmp", ".gif", ".tif", ".tiff"]
+      patterns =
+        map (fromGlob . ("posts/**" ++)) extensions
+          <> map (fromGlob . ("images/**" ++)) extensions
   foldl1 (.||.) patterns
 
 --------------------------------------------------------------------------------
@@ -133,14 +154,19 @@ tagsCtx =
         }
 
 --------------------------------------------------------------------------------
+pandocMathCompiler :: Compiler (Item String)
 pandocMathCompiler =
   let mathExtensions =
         [ Ext_tex_math_dollars,
           Ext_tex_math_double_backslash,
           Ext_latex_macros
         ]
-      defaultExtensions = writerExtensions defaultHakyllWriterOptions
-      newExtensions = defaultExtensions `mappend` pandocExtensions `mappend` extensionsFromList mathExtensions
+      defaultExtensions =
+        writerExtensions defaultHakyllWriterOptions
+      newExtensions =
+        defaultExtensions
+          `mappend` pandocExtensions
+          `mappend` extensionsFromList mathExtensions
       writerOptions =
         defaultHakyllWriterOptions
           { writerExtensions = newExtensions,
@@ -154,3 +180,18 @@ grouper = fmap (paginateEvery 30) . sortRecentFirst
 
 makeId :: PageNumber -> Identifier
 makeId pageNum = fromFilePath $ "posts/page/" ++ show pageNum ++ "/index.html"
+
+--------------------------------------------------------------------------------
+loadImage :: Compiler (Item ByteString)
+loadImage = do
+  fmap toStrict <$> getResourceLBS
+
+compressImageCompiler :: Int -> Item ByteString -> Compiler (Item ByteString)
+compressImageCompiler quality = return . fmap (compressImage quality)
+
+-- compress and save image as jpg
+compressImage :: Int -> ByteString -> ByteString
+compressImage quality src =
+  case decodeImage src of
+    Left s -> error s
+    Right dynImage -> toStrict (imageToJpg quality dynImage)
