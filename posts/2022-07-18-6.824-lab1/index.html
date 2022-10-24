@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teahouse Smyrna - 6.824 Lab 1 MapReduce</title>
+    <link rel="stylesheet" href="../../css/tailwind.css" />
+    <link rel="stylesheet" href="../../css/tailwind-extra.css" />
+    <link rel="stylesheet" href="../../css/syntax.css" />
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <!-- mathjax -->
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+
+<body class="h-full text-gray-700 bg-gray-50 dark:bg-zinc-900 dark:text-zinc-300">
+
+    <section class="sticky top-0 py-2 w-full bg-gray-100 border-b-2 border-gray-200 sm:py-4 hover:shadow dark:border-zinc-600 dark:bg-zinc-700">
+
+        <div class="flex flex-row justify-between items-center px-6 mx-auto max-w-3xl">
+            <div class="flex-1 justify-start">
+                <div class="flex flex-shrink-0 items-center text-2xl">
+                    <a href="../../index.html" class="title-logo">
+                        Teahouse Smyrna
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex flex-row justify-end space-x-2 font-mono font-light sm:space-x-10 sm:font-normal flex-0">
+                <a href="../../" class="menu-link">
+                    Home
+                </a>
+                <a href="../../posts/page/1/index.html" class="menu-link">
+                    Archives
+                </a>
+                <a href="../../about.html" class="menu-link">
+                    About
+                </a>
+            </div>
+        </div>
+
+    </section>
+
+
+    <section class="flex flex-col justify-center items-center px-6 pb-8 mx-auto mt-2 max-w-3xl sm:mt-4 md:rounded">
+        <div class="pt-2 sm:pt-4"></div>
+
+        <div class="overflow-hidden py-6 px-2 mt-4 w-full bg-gray-100 rounded-xl border-2 border-gray-200 sm:py-10 sm:px-6 sm:rounded-2xl hover:shadow-md dark:border-zinc-600 dark:bg-zinc-700">
+    <div id="page-title" class="page-title">
+        6.824 Lab 1 MapReduce
+    </div>
+    <div class="font-sans sm:text-lg text-start">
+    July 18, 2022
+    
+</div>
+<div class="py-2 sm:font-mono row">
+    
+    <span class="text-sm">
+        Tags:
+    </span>
+    
+
+    
+    <a href="../../tags/6.824.html" class="text-sm">
+        6.824
+    </a>
+    
+    <a href="../../tags/distributed system.html" class="text-sm">
+        distributed system
+    </a>
+    
+</div>
+
+<div class="pt-4 pb-2">
+    <img class="object-cover w-full h-96 rounded-lg border-2 border-gray-200 dark:border-zinc-600" src="../../posts/2022-07-18-6.824-lab1/cover.png" loading="lazy" />
+</div>
+
+<section class="pb-10 font-sans text-sm sm:text-base">
+    <h1 id="各个结构体的定义">各个结构体的定义</h1>
+<h2 id="coordinator">Coordinator</h2>
+<p>Coordinator 保存所有未完成的 map 和 reduce 任务，并且对整个结构体用锁确保不出现冲突读写。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Coordinator <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> <span class="co">// Your definitions here.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> MapTasks    <span class="kw">map</span><span class="op">[</span><span class="dt">int</span><span class="op">]</span>TaskCandidate</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> ReduceTasks <span class="kw">map</span><span class="op">[</span><span class="dt">int</span><span class="op">]</span>TaskCandidate</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> NReduce     <span class="dt">int</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> NMap        <span class="dt">int</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a> mutex sync<span class="op">.</span>Mutex</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TaskCandidate <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a> FileName  <span class="dt">string</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a> Status    <span class="dt">int</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a> StartTime time<span class="op">.</span>Time</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="rpc">RPC</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> <span class="op">(</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> Empty <span class="op">=</span> <span class="ot">iota</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> Map</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a> Reduce</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> <span class="op">(</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a> Idle <span class="op">=</span> <span class="ot">iota</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a> Running</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a> Success</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a> Failed</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Task <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> Id       <span class="dt">int</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> Type     <span class="dt">int</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a> FileName <span class="dt">string</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a> Status   <span class="dt">int</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a> NReduce  <span class="dt">int</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a> NMap     <span class="dt">int</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Go 居然没有 enum，导致很容易出现 <code class="verbatim">Task.Type = Idle</code> 或者 <code class="verbatim">Task.Status = Map</code> 这样不对应的情况，编辑器也没有办法提示。
+（或者有什么别的办法？）</p>
+<h1 id="coordinator-1">Coordinator</h1>
+<p>接收 RPC 参数的函数，其中 args 是 worker 的上一个任务，reply 是需要该函数指派的任务。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> <span class="op">(</span>c <span class="op">*</span>Coordinator<span class="op">)</span> AssignTask<span class="op">(</span>args <span class="op">*</span>Task<span class="op">,</span> reply <span class="op">*</span>Task<span class="op">)</span> <span class="dt">error</span></span></code></pre></div>
+<p><code class="verbatim">args</code> 的处理规则：</p>
+<ul>
+<li>如果上一个任务执行成功，则将其从待执行的任务表中（即 <code class="verbatim">MapTasks</code> 或 <code class="verbatim">ReduceTasks</code> ）移除；</li>
+<li>否则将待执行任务表中的该任务标记为 <code class="verbatim">Idle</code> ，等待下一次分配。</li>
+</ul>
+<p><code class="verbatim">reply</code> 的分配规则：</p>
+<ul>
+<li>所有 map 任务执行完毕后，再开始分配 reduce 任务；</li>
+<li>从待执行任务表中寻找状态为 <code class="verbatim">Idle</code> 或开始时间早于10秒前的任务作为 <code class="verbatim">reply</code> ；</li>
+<li>若无任务可分配，则设置 <code class="verbatim">reply.Type = Empty</code> 。</li>
+</ul>
+<h1 id="worker">Worker</h1>
+<div class="sourceCode" id="cb4"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> Worker<span class="op">(</span>mapf <span class="kw">func</span><span class="op">(</span><span class="dt">string</span><span class="op">,</span> <span class="dt">string</span><span class="op">)</span> <span class="op">[]</span>KeyValue<span class="op">,</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a> reducef <span class="kw">func</span><span class="op">(</span><span class="dt">string</span><span class="op">,</span> <span class="op">[]</span><span class="dt">string</span><span class="op">)</span> <span class="dt">string</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a> lastTask <span class="op">:=</span> Task<span class="op">{</span>Type<span class="op">:</span> Empty<span class="op">}</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a> newTask <span class="op">:=</span> Task<span class="op">{</span>Type<span class="op">:</span> Empty<span class="op">}</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span> <span class="op">{</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  ok <span class="op">:=</span> call<span class="op">(</span><span class="st">&quot;Coordinator.AssignTask&quot;</span><span class="op">,</span> <span class="op">&amp;</span>lastTask<span class="op">,</span> <span class="op">&amp;</span>newTask<span class="op">)</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">!</span>ok <span class="op">{</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>   fmt<span class="op">.</span>Println<span class="op">(</span><span class="st">&quot;call failed!&quot;</span><span class="op">)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>   newTask<span class="op">.</span>Type <span class="op">=</span> Empty</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> newTask<span class="op">.</span>Type <span class="op">==</span> Empty <span class="op">{</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>   time<span class="op">.</span>Sleep<span class="op">(</span>time<span class="op">.</span>Second<span class="op">)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> newTask<span class="op">.</span>Type <span class="op">==</span> Map <span class="op">{</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>   doMapTask<span class="op">(</span>mapf<span class="op">,</span> <span class="op">&amp;</span>newTask<span class="op">)</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> newTask<span class="op">.</span>Type <span class="op">==</span> Reduce <span class="op">{</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>   doReduceTask<span class="op">(</span>reducef<span class="op">,</span> <span class="op">&amp;</span>newTask<span class="op">)</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  lastTask <span class="op">=</span> newTask</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  newTask <span class="op">=</span> Task<span class="op">{</span>Type<span class="op">:</span> Empty<span class="op">}</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a> <span class="op">}</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<ul>
+<li>Map task 产生的中间结果保存在 <code class="verbatim">mr-intermediate-{$mapTaskId}-{0..$NReduce}</code> 文件中。</li>
+<li>Reduce task 从 <code class="verbatim">mr-intermediate-{0..$NMap}-{$reduceTaskId}</code> 文件中载入数据，输出到 <code class="verbatim">mr-out-{$reduceTaskId}</code> 中。</li>
+</ul>
+<h1 id="未实现的部分">未实现的部分</h1>
+<blockquote>
+<p>To ensure that nobody observes partially written files in the presence of crashes,
+the MapReduce paper mentions the trick of using a temporary file and atomically renaming
+it once it is completely written. You can use <code class="verbatim">ioutil.TempFile</code> to create a temporary file
+and os.Rename to atomically rename it.</p>
+</blockquote>
+<p>测试脚本看起来不包含这种情况，所以目前是全 PASS。</p>
+</section>
+
+<script src="https://giscus.app/client.js" data-repo="stephanoskomnenos/stephanoskomnenos.github.io" data-repo-id="R_kgDOGu1U-w" data-category="General" data-category-id="DIC_kwDOGu1U-84CSImR" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+</script>
+
+</div>
+
+    </section>
+
+    <footer class="bottom-0 mt-6 w-full h-8 text-sm sm:h-14 sm:text-sm">
+        <div class="font-sans text-center">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll" class="italic">Hakyll</a>
+        </div>
+    </footer>
+</body>
+
+</html>
