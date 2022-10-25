@@ -3,17 +3,21 @@
 
 import Codec.Picture (decodeImage)
 import Codec.Picture.Saving (imageToJpg)
-import Data.ByteString (ByteString)
+import qualified Data.ByteString as BS
 import Data.ByteString.Lazy (toStrict)
+import Data.Functor.Identity (runIdentity)
 import Data.Maybe (fromMaybe)
 import Data.Monoid (mappend)
 import qualified Data.Set as S
 import Data.String (fromString)
+import Data.Text (Text)
+import qualified Data.Text as T
 import Data.Tree (flatten)
 import Hakyll
-import Hakyll.Core.Compiler
-import System.FilePath
+import System.FilePath (takeDirectory)
 import Text.Pandoc.Options
+import qualified Text.Pandoc.Templates as PT
+import qualified Text.Printf as T
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -37,7 +41,7 @@ main = hakyll $ do
   match (fromList ["about.org"]) $ do
     route $ setExtension "html"
     compile $
-      pandocMathCompiler
+      pandocCompilerWithMath
         >>= loadAndApplyTemplate "templates/article-card.html" defaultContext
         >>= loadAndApplyTemplate "templates/default.html" defaultContext
         >>= relativizeUrls
@@ -78,8 +82,13 @@ main = hakyll $ do
 
   match postPattern $ do
     route $ setExtension "html"
-    compile $
-      pandocMathCompiler
+    compile $ do
+      identifier <- getUnderlying
+      toc <- getMetadataField identifier "toc"
+      let selectedCompiler = case toc of
+            Nothing -> pandocCompilerWithMath
+            Just _ -> pandocCompilerWithMathAndTOC
+      selectedCompiler
         >>= loadAndApplyTemplate "templates/article-content.html" postCtx
         >>= loadAndApplyTemplate "templates/article-card.html" postCtx
         >>= loadAndApplyTemplate "templates/default.html" postCtx
@@ -154,8 +163,8 @@ tagsCtx =
         }
 
 --------------------------------------------------------------------------------
-pandocMathCompiler :: Compiler (Item String)
-pandocMathCompiler =
+withMath :: WriterOptions
+withMath =
   let mathExtensions =
         [ Ext_tex_math_dollars,
           Ext_tex_math_double_backslash,
@@ -167,12 +176,35 @@ pandocMathCompiler =
         defaultExtensions
           `mappend` pandocExtensions
           `mappend` extensionsFromList mathExtensions
-      writerOptions =
-        defaultHakyllWriterOptions
-          { writerExtensions = newExtensions,
-            writerHTMLMathMethod = MathJax ""
-          }
-   in pandocCompilerWith defaultHakyllReaderOptions writerOptions
+   in defaultHakyllWriterOptions
+        { writerExtensions = newExtensions,
+          writerHTMLMathMethod = MathJax ""
+        }
+
+tocTemplate :: PT.Template Text
+tocTemplate =
+  either error id . runIdentity . PT.compileTemplate "" $
+    T.unlines
+      [ "<div class=\"toc\">",
+        "$toc$",
+        "</div>",
+        "$body$"
+      ]
+
+withMathAndTOC :: WriterOptions
+withMathAndTOC =
+  withMath
+    { writerSectionDivs = False,
+      writerTableOfContents = True,
+      writerTOCDepth = 2,
+      writerTemplate = Just tocTemplate
+    }
+
+pandocCompilerWithMath :: Compiler (Item String)
+pandocCompilerWithMath = pandocCompilerWith defaultHakyllReaderOptions withMath
+
+pandocCompilerWithMathAndTOC :: Compiler (Item String)
+pandocCompilerWithMathAndTOC = pandocCompilerWith defaultHakyllReaderOptions withMathAndTOC
 
 --------------------------------------------------------------------------------
 grouper :: (MonadMetadata m, MonadFail m) => [Identifier] -> m [[Identifier]]
@@ -182,16 +214,17 @@ makeId :: PageNumber -> Identifier
 makeId pageNum = fromFilePath $ "posts/page/" ++ show pageNum ++ "/index.html"
 
 --------------------------------------------------------------------------------
-loadImage :: Compiler (Item ByteString)
-loadImage = do
-  fmap toStrict <$> getResourceLBS
+loadImage :: Compiler (Item BS.ByteString)
+loadImage = fmap toStrict <$> getResourceLBS
 
-compressImageCompiler :: Int -> Item ByteString -> Compiler (Item ByteString)
+compressImageCompiler :: Int -> Item BS.ByteString -> Compiler (Item BS.ByteString)
 compressImageCompiler quality = return . fmap (compressImage quality)
 
 -- compress and save image as jpg
-compressImage :: Int -> ByteString -> ByteString
+compressImage :: Int -> BS.ByteString -> BS.ByteString
 compressImage quality src =
-  case decodeImage src of
-    Left s -> error s
-    Right dynImage -> toStrict (imageToJpg quality dynImage)
+  if BS.length src < 1024 * 200 -- do not compress images smaller than 200 KB
+    then src
+    else case decodeImage src of
+      Left s -> error s
+      Right dynImage -> toStrict (imageToJpg quality dynImage)
