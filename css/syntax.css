@@ -78,9 +78,11 @@ pre.numberSource {
 }
 
 div.sourceCode {
-    background-color: #e5e7eb;
+    background-color: inherit;
     padding: 0.5em;
     border-radius: 0.5em;
+    border-width: 2px;
+    border-color: #9ca3af;
 }
 
 @media screen {
@@ -90,7 +92,7 @@ div.sourceCode {
 }
 
 p>code,li>code {
-    background-color: #e5e7eb;
+    background-color: inherit;
     border-radius: 0.15em;
     padding-left: 0.4em;
     padding-right: 0.4em;
@@ -252,9 +254,10 @@ code span.wa {
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
     p>code,li>code {
-        background-color: #52525b;
+        background-color: inherit;
     }
     div.sourceCode {
-        background-color: #52525b;
+        background-color: inherit;
+        border-color: #52525b;
     }
 }

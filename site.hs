@@ -12,12 +12,10 @@ import qualified Data.Set as S
 import Data.String (fromString)
 import Data.Text (Text)
 import qualified Data.Text as T
-import Data.Tree (flatten)
 import Hakyll
 import System.FilePath (takeDirectory)
 import Text.Pandoc.Options
 import qualified Text.Pandoc.Templates as PT
-import qualified Text.Printf as T
 
 --------------------------------------------------------------------------------
 main :: IO ()

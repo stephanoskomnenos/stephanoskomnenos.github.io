@@ -16,5 +16,5 @@ tailwind:
 	npx tailwindcss -o ./css/tailwind.css
 
 clean:
-	rm -r _cache & \
+	cabal exec site clean & \
 	rm css/tailwind.css css/tailwind-extra.css

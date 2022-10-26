@@ -49,7 +49,7 @@
     }
 
     blockquote {
-        @apply py-1 px-3 my-2 mx-1 font-sans italic border-l-4 bg-gray-300 border-gray-600 dark:bg-zinc-600 dark:border-zinc-400;
+        @apply px-3 py-1 my-2 font-sans italic border-l-2 border-gray-400 dark:border-zinc-600;
     }
 
     figure {
@@ -99,7 +99,7 @@
     }
 
     .toc {
-        @apply py-1 px-3 my-2 mx-1 font-sans border-l-4 bg-gray-300 border-gray-600 dark:bg-zinc-600 dark:border-zinc-400;
+        @apply py-1 px-3 my-2 mx-1 font-sans border-l-4 bg-gray-200 border-gray-400 dark:bg-zinc-700 dark:border-zinc-600;
     }
 }
 
