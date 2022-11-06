@@ -4,8 +4,9 @@ title: About
 * 关于我
 
 + [[https://github.com/stephanoskomnenos][GitHub]]
-+ [[https://t.me/stephanos_komnenos][Telegram]]
 + [[mailto:linjt267@outlook.com][Email]]
++ [[https://t.me/stephanos_komnenos][Telegram]]
++ [[https://gist.github.com/stephanoskomnenos/41ae8b0faad21e17fc7668cb787672fd][GPG PubKey]]
 
 * 关于这个网站
 
